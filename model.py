@@ -40,6 +40,12 @@ class Movie(db.Model):
     released_at = db.Column(db.DateTime)
     imdb_url = db.Column(db.String(64))
 
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Movie movie_id=%s title=%s released_at=%s imdb_url=%s>" % (self.movie_id, self.title, self.released_at, self.imdb_url)
+        
+
 class Rating(db.Model):
     """Movie Rating info"""
 
@@ -49,6 +55,12 @@ class Rating(db.Model):
     movie_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer)
     score = db.Column(db.Integer)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Rating user_id=%s movie_id=%s score=%s>" % (self.user_id, self.movie_id, self.score)
+
 
 ##############################################################################
 # Helper functions
