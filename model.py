@@ -6,13 +6,13 @@ from flask_sqlalchemy import SQLAlchemy
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
 # object, where we do most of our interactions (like committing, etc.)
 
-db = SQLAlchemy()
+db = SQLAlchemy() #db is an instance of SQLAlquemy
 
 
 ##############################################################################
 # Model definitions
 
-class User(db.Model):
+class User(db.Model): #User is a subclass of db.Model. 
     """User of rating website."""
 
     __tablename__ = "users"
@@ -36,7 +36,7 @@ class Movie(db.Model):
     __tablename__ = "movies"
 
     movie_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    title = db.Column(db.String(64))
+    title = db.Column(db.String(64), nullable = False)
     released_at = db.Column(db.DateTime)
     imdb_url = db.Column(db.String(64))
 
@@ -44,7 +44,7 @@ class Movie(db.Model):
         """Provide helpful representation when printed."""
 
         return "<Movie movie_id=%s title=%s released_at=%s imdb_url=%s>" % (self.movie_id, self.title, self.released_at, self.imdb_url)
-        
+
 
 class Rating(db.Model):
     """Movie Rating info"""
@@ -52,9 +52,9 @@ class Rating(db.Model):
     __tablename__= "ratings"
 
     rating_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    movie_id = db.Column(db.Integer)
-    user_id = db.Column(db.Integer)
-    score = db.Column(db.Integer)
+    movie_id = db.Column(db.Integer, nullable = False)
+    user_id = db.Column(db.Integer, nullable = False)
+    score = db.Column(db.Integer, nullable = False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -72,6 +72,7 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ratings.db'
     db.app = app
     db.init_app(app)
+    db.app.config["SQLALCHEMY_ECHO"] = True
 
 
 

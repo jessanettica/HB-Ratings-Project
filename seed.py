@@ -19,8 +19,8 @@ def load_users():
         new_user = User(user_id=new_user_id, age=user_age, zipcode=user_zipcode)
     #new_user is the object. new_user is also an instance of the User class. 
         db.session.add(new_user)
-    db.session.commit()    
-
+    db.session.commit()
+    print "Done loading users!"
 
 
 def load_movies():
@@ -35,17 +35,14 @@ def load_movies():
         else:
             new_movie_id = new_movie_cell[0]
             new_title= new_movie_cell[1][:-7]
+            #Not sure if every title actually has a year, if the title doesn't have a year are we cutting off the last 6 characters of the film's title?
             new_release_date = new_movie_cell[2]
             d=datetime.strptime(new_release_date, "%d-%b-%Y")
             new_url = new_movie_cell[4]
             new_movie = Movie(movie_id=new_movie_id, title=new_title, released_at=d, imdb_url=new_url)
             db.session.add(new_movie)
     db.session.commit()  
-
-
-        
-
-        
+    print "Done loading movies! yay!"
 
 
 def load_ratings():
@@ -63,6 +60,7 @@ def load_ratings():
 
         db.session.add(new_rating)
     db.session.commit()
+    print "Done loading ratings! go go go!"
 
 if __name__ == "__main__":
     connect_to_db(app) 
