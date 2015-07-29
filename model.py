@@ -47,14 +47,26 @@ class Movie(db.Model):
 
 
 class Rating(db.Model):
-    """Movie Rating info"""
+    """Rating of a movie by a user."""
+
 
     __tablename__= "ratings"
 
     rating_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    movie_id = db.Column(db.Integer, nullable = False)
-    user_id = db.Column(db.Integer, nullable = False)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable = False)
     score = db.Column(db.Integer, nullable = False)
+
+    #define a relationship to user
+    user = db.relationship("User", 
+                            backref=db.backref("ratings", order_by=rating_id))
+
+
+    #Define relationship to movie
+    movie= db.relationship("Movie",
+                            backref=db.backref("ratings", order_by=rating_id))
+
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -72,7 +84,7 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ratings.db'
     db.app = app
     db.init_app(app)
-    db.app.config["SQLALCHEMY_ECHO"] = True
+    # db.app.config["SQLALCHEMY_ECHO"] = True
 
 
 
