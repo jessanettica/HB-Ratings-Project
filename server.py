@@ -36,6 +36,20 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
+
+
+
+@app.route("/user_page/<int:user_id>")
+def show_user_info(user_id):
+    """ Return page showing the details of a given user """
+
+
+    user = User.query.get(user_id)
+    
+    
+    return render_template("user_info_page.html", user=user)
+
+
 @app.route("/login")
 def login_page():
     """ Page to login """
@@ -74,14 +88,6 @@ def submit_user_login():
     flash("You have successfully logged in!")
 
     return redirect('/user_page')
-
-@app.route("/user_page")
-
-# query the database for user's name, age, zipcode, and the score and film title of the films they rated.
-
-# This should link to user__info_page
-
-# Include a button that return user to the previous page
 
 
 
