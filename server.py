@@ -73,7 +73,15 @@ def submit_user_login():
     
     flash("You have successfully logged in!")
 
-    return redirect('/')
+    return redirect('/user_page')
+
+@app.route("/user_page")
+
+# query the database for user's name, age, zipcode, and the score and film title of the films they rated.
+
+# This should link to user__info_page
+
+# Include a button that return user to the previous page
 
 
 
