@@ -60,21 +60,17 @@ def logout_page():
     return render_template("logout_page.html")
 
 
-@app.route("/submission", methods=["POST"])
-#change route to login so it is clear what the route is doing
+@app.route("/login", methods=["POST"])
+#change route to login so it is clear what the route is doing DONE
 def submit_user_login():
     user_email = request.form.get("email")
     user_password = request.form.get("password")
     
+
     logged_in_user = User.query.filter(User.email== user_email).first()
 
-
-    # query user from database using email
-    #get user id
-    #add user id to session session['user']= to what we get from 70
-    print "HEEEEEEEEEEEEEEEEEELLLLLLLLLLLOOOOO", logged_in_user
-
-#query database for user id and add id to session
+    session['logged_in_user'] = logged_in_user.user_id
+    
     flash("You have successfully logged in!")
 
     return redirect('/')
