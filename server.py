@@ -49,6 +49,9 @@ def show_user_info(user_id):
     
     return render_template("user_info_page.html", user=user)
 
+#GO BACK AND RESEARCH/ASK/FIGURE OUT HOW USER_INFO_PAGE.HTML IS LINKING TO USER_ID, IS IT THROUGH JINJA CREATING 900+ DIFFERENT
+#WEBPAGES FOR EACH USER??? WHAT IS GOING ON AND HOW DOES THIS WORK????????    
+
 
 @app.route("/login")
 def login_page():
@@ -57,6 +60,13 @@ def login_page():
 
 
     return render_template("login_page.html")
+
+
+# @app.route("/movies_page")
+# def movie_page():
+#     movie = Movie.query.get(title)
+
+
 
 @app.route("/logout")
 def logout_page():
@@ -72,6 +82,11 @@ def logout_page():
     session.pop('user_username', None)
     session.pop('user_password', None)
     return render_template("logout_page.html")
+
+
+
+
+
 
 
 @app.route("/login", methods=["POST"])
