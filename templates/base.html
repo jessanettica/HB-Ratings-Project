@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+  <title>Ratings</title>
+</head>
+
+<body>
+
+  <hr>
+
+{% block content %}{% endblock %}
+
+{% for message in get_flashed_messages() %} {{message}} {% endfor %} 
+
+
+</body>
+</html>

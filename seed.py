@@ -8,7 +8,7 @@ from datetime import datetime
 def load_users():
     """Load users from u.user into database."""
 
-    open_user_file = open('seed_data/u.user')
+    open_user_file = open('seed_data/u.user'):
 
     for row in open_user_file:
         user_info_cell = row.rstrip().split("|")
@@ -18,7 +18,15 @@ def load_users():
 
         new_user = User(user_id=new_user_id, age=user_age, zipcode=user_zipcode)
     #new_user is the object. new_user is also an instance of the User class. 
+
+#alternative: 
+#row= row.rstrip()
+#user_id, age_gender,occupation, zeipcode = row.split("|")
+#user = User(user_id=user_id, age=age, zipode = zipcode)
+
+
         db.session.add(new_user)
+        #we need to add a session otherwise it will never be stored
     db.session.commit()
     print "Done loading users!"
 
@@ -27,7 +35,8 @@ def load_movies():
     """Load movies from u.item into database."""
 
     open_movie_file = open('seed_data/u.item')
-
+#alternative:we can unpack just part of the row!
+# movie_id, title, released_str, junk, imdb_url = row.split("|")[:5]
     for row in open_movie_file:
         new_movie_cell = row.rstrip().split("|")
         if new_movie_cell[1] =='unknown':
