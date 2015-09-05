@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
 # object, where we do most of our interactions (like committing, etc.)
 
-db = SQLAlchemy() #db is an instance of SQLAlquemy
+db = SQLAlchemy()  #db is an instance of SQLAlquemy
 
 
 ##############################################################################
@@ -39,13 +39,13 @@ class User(db.Model): #User is a subclass of db.Model.
 
         else:
             return 0.0
+
     def predict_rating(self, movie):
         """Predict user's ratings of a movie"""
 
         other_ratings = movie.ratings
 
-
-        print " ~~~~~~~ other ratings:", other_ratings
+        print "other ratings:", other_ratings
 
         similarities = [
             (self.similarity(r.user), r)
@@ -64,12 +64,16 @@ class User(db.Model): #User is a subclass of db.Model.
         return numerator/denominator
 
     @classmethod
-
+    def add_new_user(cls, email, password):
+        new_user = cls(email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        return new_user
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<User user_id=%s email=%s>" % (self.user_id, self.email)
+        return "<User user_id=%s email=%s> password=%s age=%s zipcode=%s>" % (self.user_id, self.email, self.password, self.age, self.zipcode)
 
 
 class Movie(db.Model):
@@ -77,8 +81,8 @@ class Movie(db.Model):
 
     __tablename__ = "movies"
 
-    movie_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    title = db.Column(db.String(64), nullable = False)
+    movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    title = db.Column(db.String(64), nullable=False)
     released_at = db.Column(db.DateTime)
     imdb_url = db.Column(db.String(64))
 
@@ -108,12 +112,40 @@ class Rating(db.Model):
     movie= db.relationship("Movie",
                             backref=db.backref("ratings", order_by=rating_id))
 
+    def update_rating(self, new_rating):
+        self.score = new_rating
+        db.session.commit()
+
+    @classmethod
+    def create_new_rating(cls, movie_id, user_id, score):
+        new_rating_row = cls(movie_id=movie_id, user_id=user_id, score=score)
+        db.session.add(new_rating_row)
+        db.session.commit()
+        return new_rating_row
+
+    @classmethod
+    def get_rating(cls, movie_id, user_id):
+        rating = db.session.query(cls).filter(cls.movie_id == movie_id, cls.user_id == user_id).first()
+        return rating
+
+    @classmethod
+    def get user_ratings(cls, user_id):
+
+        rating_list = db.session.query(cls).filter(cls.user_id == user_id).all()
+        return rating_list
+
+    @classmethod
+    def get_movie_ratings(cls, movie_id):
+
+        rating_list = db.session.query(cls).filter(cls.movie_id == movie_id).all()
+        return rating_list
+
 
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Rating user_id=%s movie_id=%s score=%s>" % (self.user_id, self.movie_id, self.score)
+        return "<Rating rating_id=%s user_id=%s movie_id=%s score=%s>" % (self.rating_id, self.user_id, self.movie_id, self.score)
 
 
 ##############################################################################
