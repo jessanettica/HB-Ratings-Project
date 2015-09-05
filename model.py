@@ -17,11 +17,53 @@ class User(db.Model): #User is a subclass of db.Model.
 
     __tablename__ = "users"
 
-    user_id = db.Column(db.Integer, autoincrement = True, primary_key = True)
-    email = db.Column(db.String(64), nullable = True)
-    password = db.Column(db.String(64), nullable = True)
-    age = db.Column(db.Integer, nullable = True)
-    zipcode = db.Column(db.String(15), nullable = True)
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    email = db.Column(db.String(64), nullable=True)
+    password = db.Column(db.String(64), nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+    zipcode = db.Column(db.String(15), nullable=True)
+
+    def similarity(self, other):
+        """Return Pearson rating for user compared to other user,"""
+
+        u_ratings = {}
+        paired_ratings = []
+
+        for r in self.ratings:
+            u_r = u_ratings.get(r.movie_id)
+            if u_r:
+                paired ratings.append( (u_r.score, r.score) )
+
+        if paired_ratings:
+            return correlation.pearson(paired_ratings)
+
+        else:
+            return 0.0
+    def predict_rating(self, movie):
+        """Predict user's ratings of a movie"""
+
+        other_ratings = movie.ratings
+
+
+        print " ~~~~~~~ other ratings:", other_ratings
+
+        similarities = [
+            (self.similarity(r.user), r)
+            for r in other_ratings
+        ]
+        similarities.sort(reverse=True)
+
+        similarities = [(sim, r) for sim, r in similarities if sim > 0]
+
+        if not similarities:
+            return None
+
+        numerator = sum([r.score * sim for sim, r in similarities])
+        denominator = sum([sim for sim, r in similarities])
+
+        return numerator/denominator
+
+    @classmethod
 
 
     def __repr__(self):
